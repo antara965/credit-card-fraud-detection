@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 # LOAD DATA
-data = pd.read_csv("creditcard.csv")
+data = pd.read_csv("creditcard_sample.csv")
 
 st.title("💳 Credit Card Fraud Detection Dashboard")
 

@@ -1,149 +1,241 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import joblib
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # PAGE CONFIG
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
+    page_icon="💳",
     layout="wide"
 )
 
-# LOAD MODEL + DATA
-model = joblib.load("fraud_model.pkl")
-
+# LOAD DATA
 data = pd.read_csv("creditcard.csv")
 
-# TITLE
-st.title("💳 Credit Card Fraud Detection System")
+st.title("💳 Credit Card Fraud Detection Dashboard")
 
 st.markdown("""
-This application predicts whether a transaction is fraudulent or genuine using Machine Learning.
+This dashboard analyzes fraudulent and genuine credit card transactions using Machine Learning and Data Analytics.
 """)
 
 # SIDEBAR
 st.sidebar.title("Navigation")
 
 section = st.sidebar.radio(
-    "Go to",
+    "Go To",
     [
         "Dataset Overview",
         "Visualizations",
         "Model Performance",
-        "Fraud Prediction"
+        "About Project"
     ]
 )
 
-# DATASET OVERVIEW
 if section == "Dataset Overview":
 
     st.header("Dataset Overview")
 
-    total = len(data)
-    fraud = len(data[data['Class'] == 1])
-    valid = len(data[data['Class'] == 0])
+    total_transactions = len(data)
+    fraud_transactions = len(data[data['Class'] == 1])
+    valid_transactions = len(data[data['Class'] == 0])
 
-    col1, col2, col3 = st.columns(3)
+    fraud_percentage = (
+        fraud_transactions / total_transactions
+    ) * 100
 
-    col1.metric("Total Transactions", total)
-    col2.metric("Fraud Transactions", fraud)
-    col3.metric("Valid Transactions", valid)
+    # METRICS
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric(
+        "Total Transactions",
+        f"{total_transactions:,}"
+    )
+
+    col2.metric(
+        "Fraud Transactions",
+        fraud_transactions
+    )
+
+    col3.metric(
+        "Valid Transactions",
+        valid_transactions
+    )
+
+    col4.metric(
+        "Fraud Percentage",
+        f"{fraud_percentage:.4f}%"
+    )
+
+    st.divider()
+
+    # DATA PREVIEW
 
     st.subheader("Dataset Preview")
 
     st.dataframe(data.head())
 
-# VISUALIZATIONS
+    st.divider()
+
+    # DATASET INFO
+
+    st.subheader("Dataset Information")
+
+    st.write(f"Number of Rows: {data.shape[0]}")
+    st.write(f"Number of Columns: {data.shape[1]}")
+
 elif section == "Visualizations":
 
-    st.header("📈 Visualizations")
-
-    # Fraud Distribution
-    st.subheader("Fraud vs Valid Transactions")
-
-    fig, ax = plt.subplots()
-
-    sns.countplot(x='Class', data=data, ax=ax)
-
-    ax.set_xticklabels(['Valid', 'Fraud'])
-
-    st.pyplot(fig)
-
-    # Amount Distribution
-    st.subheader("Transaction Amount Distribution")
-
-    fig2, ax2 = plt.subplots(figsize=(8,5))
-
-    sns.histplot(data['Amount'], bins=50, ax=ax2)
-
-    st.pyplot(fig2)
-
-    # Correlation Heatmap
-    st.subheader("Correlation Heatmap")
-
-    fig3, ax3 = plt.subplots(figsize=(12,8))
-
-    sns.heatmap(
-        data.corr(),
-        cmap='coolwarm',
-        ax=ax3
-    )
-
-    st.pyplot(fig3)
-
-# MODEL PERFORMANCE
-elif section == "Model Performance":
-
-    st.header("🤖 Model Performance")
-
-    st.metric("Accuracy", "99%")
-    st.metric("ROC-AUC Score", "0.96")
+    st.header("Visualizations")
 
     st.markdown("""
-### Interpretation
+    These visualizations help analyze transaction patterns, fraud distribution, and model performance.
+    """)
 
-- High ROC-AUC score indicates strong fraud detection capability.
-- Model performs well even on imbalanced datasets.
-""")
+    st.divider()
 
-# FRAUD PREDICTION
-elif section == "Fraud Prediction":
+    # FRAUD VS VALID
 
-    st.header("🚨 Predict Fraudulent Transaction")
+    st.subheader("1️⃣ Fraud vs Valid Transactions")
 
-    st.markdown("Enter transaction feature values below.")
+    st.image(
+        "visuals/fraudvsvalid.png",
+        use_container_width=True
+    )
 
-    input_data = []
+    st.markdown("""
+    **Observation:**  
+    Fraudulent transactions are significantly lower than genuine transactions, showing severe class imbalance in the dataset.
+    """)
 
-    for i in range(1, 29):
+    st.divider()
 
-        value = st.number_input(
-            f"V{i}",
-            value=0.0
-        )
+    # CORRELATION MATRIX
 
-        input_data.append(value)
+    st.subheader("2️⃣ Correlation Heatmap")
 
-    amount = st.number_input("Amount", value=0.0)
+    st.image(
+        "visuals/corr-mat.png",
+        use_container_width=True
+    )
 
-    input_data.append(amount)
+    st.markdown("""
+    **Observation:**  
+    The heatmap shows relationships between different features and helps identify highly correlated variables.
+    """)
 
-    time = st.number_input("Time", value=0.0)
+    st.divider()
 
-    input_data.append(time)
+    # ROC CURVE
 
-    if st.button("Predict"):
+    st.subheader("3️⃣ ROC Curve")
 
-        input_array = np.array(input_data).reshape(1, -1)
+    st.image(
+        "visuals/roc.png",
+        use_container_width=True
+    )
 
-        prediction = model.predict(input_array)
+    st.markdown("""
+    **Observation:**  
+    The ROC-AUC score of 0.96 indicates excellent fraud detection capability with low false positive rates.
+    """)
 
-        if prediction[0] == 1:
+    st.divider()
 
-            st.error("🚨 Fraudulent Transaction Detected")
+    # CONFUSION MATRIX
 
-        else:
+    st.subheader("4️⃣ Confusion Matrix")
 
-            st.success("✅ Genuine Transaction")
+    st.image(
+        "visuals/confusion_matrix.png",
+        use_container_width=True
+    )
+
+    st.markdown("""
+    **Observation:**  
+    The confusion matrix shows that the model correctly classifies most transactions with very few misclassifications.
+    """)
+
+elif section == "Model Performance":
+
+    st.header("Model Performance")
+
+    st.markdown("""
+    Performance metrics of the Random Forest Classifier used for fraud detection.
+    """)
+
+    st.divider()
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric(
+        "Accuracy",
+        "99%"
+    )
+
+    col2.metric(
+        "ROC-AUC Score",
+        "0.96"
+    )
+
+    col3.metric(
+        "Recall",
+        "91%"
+    )
+
+    st.divider()
+
+    st.subheader("Interpretation")
+
+    st.markdown("""
+    - The model achieves very high accuracy in identifying fraudulent transactions.
+    - A ROC-AUC score of 0.96 indicates strong classification capability.
+    - High recall means the model successfully detects most fraud cases.
+    - Random Forest performs well on imbalanced classification problems.
+    """)
+
+elif section == "About Project":
+
+    st.header("About Project")
+
+    st.markdown("""
+    ### 💳 Credit Card Fraud Detection System
+
+    This project focuses on detecting fraudulent credit card transactions using Machine Learning techniques.
+
+    The dataset contains anonymized transaction information and highly imbalanced fraud data.
+
+    ### Objective
+
+    The main objective of this project is to:
+    - Detect fraudulent transactions accurately
+    - Minimize false positives
+    - Analyze fraud patterns using data visualization
+
+    ### Technologies Used
+
+    - Python
+    - Pandas
+    - NumPy
+    - Matplotlib
+    - Seaborn
+    - Scikit-learn
+    - Streamlit
+
+    ### Machine Learning Model
+
+    - Random Forest Classifier
+
+    ### Key Features
+
+    - Fraud analysis dashboard
+    - Interactive visualizations
+    - ROC Curve analysis
+    - Confusion Matrix evaluation
+    - Dataset overview metrics
+
+    ### Model Highlights
+
+    - Accuracy: 99%
+    - ROC-AUC Score: 0.96
+    - Strong fraud detection capability
+    """)

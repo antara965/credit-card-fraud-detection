@@ -1,15 +1,10 @@
 import streamlit as st
-import pandas as pd
 
-# PAGE CONFIG
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
     page_icon="💳",
     layout="wide"
 )
-
-# LOAD DATA
-data = pd.read_csv("creditcard_sample.csv")
 
 st.title("💳 Credit Card Fraud Detection Dashboard")
 
@@ -17,8 +12,7 @@ st.markdown("""
 This dashboard analyzes fraudulent and genuine credit card transactions using Machine Learning and Data Analytics.
 """)
 
-# SIDEBAR
-st.sidebar.title("Navigation")
+st.sidebar.title("📌 Navigation")
 
 section = st.sidebar.radio(
     "Go To",
@@ -32,17 +26,15 @@ section = st.sidebar.radio(
 
 if section == "Dataset Overview":
 
-    st.header("Dataset Overview")
+    st.header("📊 Dataset Overview")
 
-    total_transactions = len(data)
-    fraud_transactions = len(data[data['Class'] == 1])
-    valid_transactions = len(data[data['Class'] == 0])
+    total_transactions = 284807
+    fraud_transactions = 492
+    valid_transactions = 284315
 
     fraud_percentage = (
         fraud_transactions / total_transactions
     ) * 100
-
-    # METRICS
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -68,32 +60,32 @@ if section == "Dataset Overview":
 
     st.divider()
 
-    # DATA PREVIEW
+    st.subheader("📌 Dataset Information")
 
-    st.subheader("Dataset Preview")
+    st.write("Number of Rows: 284,807")
+    st.write("Number of Columns: 31")
 
-    st.dataframe(data.head())
+    st.markdown("""
+    ### Dataset Description
 
-    st.divider()
+    The dataset contains anonymized credit card transactions made by European cardholders.
 
-    # DATASET INFO
-
-    st.subheader("Dataset Information")
-
-    st.write(f"Number of Rows: {data.shape[0]}")
-    st.write(f"Number of Columns: {data.shape[1]}")
+    - Features V1 to V28 are PCA transformed features
+    - `Amount` represents transaction amount
+    - `Class` represents:
+        - 0 → Genuine Transaction
+        - 1 → Fraudulent Transaction
+    """)
 
 elif section == "Visualizations":
 
-    st.header("Visualizations")
+    st.header("📈 Visualizations")
 
     st.markdown("""
-    These visualizations help analyze transaction patterns, fraud distribution, and model performance.
+    These visualizations help analyze fraud distribution and model performance.
     """)
 
     st.divider()
-
-    # FRAUD VS VALID
 
     st.subheader("1️⃣ Fraud vs Valid Transactions")
 
@@ -104,12 +96,10 @@ elif section == "Visualizations":
 
     st.markdown("""
     **Observation:**  
-    Fraudulent transactions are significantly lower than genuine transactions, showing severe class imbalance in the dataset.
+    Fraudulent transactions are significantly lower than genuine transactions, indicating severe class imbalance.
     """)
 
     st.divider()
-
-    # CORRELATION MATRIX
 
     st.subheader("2️⃣ Correlation Heatmap")
 
@@ -120,12 +110,10 @@ elif section == "Visualizations":
 
     st.markdown("""
     **Observation:**  
-    The heatmap shows relationships between different features and helps identify highly correlated variables.
+    The heatmap highlights relationships between different transaction features.
     """)
 
     st.divider()
-
-    # ROC CURVE
 
     st.subheader("3️⃣ ROC Curve")
 
@@ -136,12 +124,10 @@ elif section == "Visualizations":
 
     st.markdown("""
     **Observation:**  
-    The ROC-AUC score of 0.96 indicates excellent fraud detection capability with low false positive rates.
+    The ROC-AUC score of 0.96 indicates excellent fraud detection capability.
     """)
 
     st.divider()
-
-    # CONFUSION MATRIX
 
     st.subheader("4️⃣ Confusion Matrix")
 
@@ -152,12 +138,12 @@ elif section == "Visualizations":
 
     st.markdown("""
     **Observation:**  
-    The confusion matrix shows that the model correctly classifies most transactions with very few misclassifications.
+    The model correctly classifies most transactions with very few misclassifications.
     """)
 
 elif section == "Model Performance":
 
-    st.header("Model Performance")
+    st.header("🤖 Model Performance")
 
     st.markdown("""
     Performance metrics of the Random Forest Classifier used for fraud detection.
@@ -184,34 +170,31 @@ elif section == "Model Performance":
 
     st.divider()
 
-    st.subheader("Interpretation")
+    st.subheader("📌 Interpretation")
 
     st.markdown("""
-    - The model achieves very high accuracy in identifying fraudulent transactions.
-    - A ROC-AUC score of 0.96 indicates strong classification capability.
-    - High recall means the model successfully detects most fraud cases.
-    - Random Forest performs well on imbalanced classification problems.
+    - High accuracy indicates strong fraud classification performance
+    - ROC-AUC score of 0.96 shows excellent separation capability
+    - High recall means most fraud cases are successfully detected
+    - Random Forest performs effectively on imbalanced datasets
     """)
 
 elif section == "About Project":
 
-    st.header("About Project")
+    st.header("📌 About Project")
 
     st.markdown("""
     ### 💳 Credit Card Fraud Detection System
 
-    This project focuses on detecting fraudulent credit card transactions using Machine Learning techniques.
+    This project focuses on identifying fraudulent credit card transactions using Machine Learning techniques.
 
-    The dataset contains anonymized transaction information and highly imbalanced fraud data.
+    ### 🎯 Objective
 
-    ### Objective
-
-    The main objective of this project is to:
     - Detect fraudulent transactions accurately
     - Minimize false positives
-    - Analyze fraud patterns using data visualization
+    - Analyze fraud patterns using visualizations
 
-    ### Technologies Used
+    ### 🛠️ Technologies Used
 
     - Python
     - Pandas
@@ -221,19 +204,11 @@ elif section == "About Project":
     - Scikit-learn
     - Streamlit
 
-    ### Machine Learning Model
+    ### 🤖 Machine Learning Model
 
     - Random Forest Classifier
 
-    ### Key Features
-
-    - Fraud analysis dashboard
-    - Interactive visualizations
-    - ROC Curve analysis
-    - Confusion Matrix evaluation
-    - Dataset overview metrics
-
-    ### Model Highlights
+    ### 📈 Model Highlights
 
     - Accuracy: 99%
     - ROC-AUC Score: 0.96

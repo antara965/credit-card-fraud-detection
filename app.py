@@ -12,7 +12,7 @@ st.markdown("""
 This dashboard analyzes fraudulent and genuine credit card transactions using Machine Learning and Data Analytics.
 """)
 
-st.sidebar.title("📌 Navigation")
+st.sidebar.title(" Navigation")
 
 section = st.sidebar.radio(
     "Go To",
@@ -26,7 +26,7 @@ section = st.sidebar.radio(
 
 if section == "Dataset Overview":
 
-    st.header("📊 Dataset Overview")
+    st.header(" Dataset Overview")
 
     total_transactions = 284807
     fraud_transactions = 492
@@ -60,7 +60,7 @@ if section == "Dataset Overview":
 
     st.divider()
 
-    st.subheader("📌 Dataset Information")
+    st.subheader(" Dataset Information")
 
     st.write("Number of Rows: 284,807")
     st.write("Number of Columns: 31")
@@ -79,7 +79,7 @@ if section == "Dataset Overview":
 
 elif section == "Visualizations":
 
-    st.header("📈 Visualizations")
+    st.header(" Visualizations")
 
     st.markdown("""
     These visualizations help analyze fraud distribution and model performance.
@@ -143,7 +143,7 @@ elif section == "Visualizations":
 
 elif section == "Model Performance":
 
-    st.header("🤖 Model Performance")
+    st.header(" Model Performance")
 
     st.markdown("""
     Performance metrics of the Random Forest Classifier used for fraud detection.
@@ -170,7 +170,7 @@ elif section == "Model Performance":
 
     st.divider()
 
-    st.subheader("📌 Interpretation")
+    st.subheader(" Interpretation")
 
     st.markdown("""
     - High accuracy indicates strong fraud classification performance
@@ -181,20 +181,20 @@ elif section == "Model Performance":
 
 elif section == "About Project":
 
-    st.header("📌 About Project")
+    st.header(" About Project")
 
     st.markdown("""
     ### 💳 Credit Card Fraud Detection System
 
     This project focuses on identifying fraudulent credit card transactions using Machine Learning techniques.
 
-    ### 🎯 Objective
+    ### Objective
 
     - Detect fraudulent transactions accurately
     - Minimize false positives
     - Analyze fraud patterns using visualizations
 
-    ### 🛠️ Technologies Used
+    ### Technologies Used
 
     - Python
     - Pandas
@@ -204,11 +204,11 @@ elif section == "About Project":
     - Scikit-learn
     - Streamlit
 
-    ### 🤖 Machine Learning Model
+    ### Machine Learning Model
 
     - Random Forest Classifier
 
-    ### 📈 Model Highlights
+    ### Model Highlights
 
     - Accuracy: 99%
     - ROC-AUC Score: 0.96
